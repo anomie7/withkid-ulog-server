@@ -1,4 +1,4 @@
-package tk.witkhid.ulog.domain;
+package tk.withkid.userlog.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 public class SearchLog {
     private Long userId;
-    private String Category;
+    private String category;
     private String region;
     private String timestamp;
 

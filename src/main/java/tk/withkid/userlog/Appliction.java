@@ -1,13 +1,13 @@
-package tk.witkhid.ulog;
+package tk.withkid.userlog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class WithkidUlogServerApplication {
+@SpringBootApplication()
+public class Appliction {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WithkidUlogServerApplication.class, args);
+		SpringApplication.run(Appliction.class, args);
 	}
 
 }

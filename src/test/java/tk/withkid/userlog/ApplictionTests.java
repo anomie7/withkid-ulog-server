@@ -1,4 +1,4 @@
-package tk.witkhid.ulog;
+package tk.withkid.userlog;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WithkidUlogServerApplicationTests {
+public class ApplictionTests {
 
 	@Test
 	public void contextLoads() {
