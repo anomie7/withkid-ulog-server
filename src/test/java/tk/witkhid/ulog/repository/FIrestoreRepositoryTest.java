@@ -1,16 +1,14 @@
 package tk.witkhid.ulog.repository;
 
-import com.google.cloud.firestore.DocumentReference;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import tk.witkhid.ulog.domain.SearchLog;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.*;
+import java.util.concurrent.ExecutionException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -20,7 +18,10 @@ public class FIrestoreRepositoryTest {
     private FIrestoreRepository fIrestoreRepository;
 
     @Test
-    public void saveSearchLog() {
-        fIrestoreRepository.saveSearchLog();
+    public void saveSearchLog() throws ExecutionException, InterruptedException {
+        SearchLog searchLog = SearchLog.builder().userId(1L).Category("Mu").region("서울").build();
+        String result = fIrestoreRepository.saveSearchLog(searchLog);
+
+        Assert.assertNotNull(result);
+        }
     }
-}
