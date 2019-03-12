@@ -2,6 +2,7 @@ package tk.withkid.userlog.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -21,10 +22,12 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 public class SearchLogService {
     private FIrestoreRepository fIrestoreRepository;
+    private Environment env;
 
     @Autowired
-    public SearchLogService(FIrestoreRepository fIrestoreRepository) {
+    public SearchLogService(FIrestoreRepository fIrestoreRepository, Environment env) {
         this.fIrestoreRepository = fIrestoreRepository;
+        this.env = env;
     }
 
     public String saveSearchLog(String accessToken, SearchLog searchLog) throws ExecutionException, InterruptedException {
@@ -43,7 +46,10 @@ public class SearchLogService {
 
     public Long getUserId(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
-        UriComponents uri = UriComponentsBuilder.fromUriString("http://localhost").path("/userId").port(8082).build();
+        String apiuri = env.getProperty("withkid.api.userId.uri");
+        String apiPort = env.getProperty("withkid.api.userId.port");
+
+        UriComponents uri = UriComponentsBuilder.fromUriString(apiuri).path("/userId").port(apiPort).build();
 
         RequestEntity<Void> req = RequestEntity.get(uri.toUri()).header("Authorization", accessToken).build();
         ResponseEntity<Long> res = restTemplate.exchange(req, Long.class);

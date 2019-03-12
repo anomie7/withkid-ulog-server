@@ -1,2 +1,20 @@
+spring:
+  profiles:
+    active:
+      - local
 server:
   port: 8083
+---
+spring:
+  profiles: production
+withkid:
+  api:
+    userId:
+---
+spring:
+  profiles: local
+withkid:
+  api:
+    userId:
+      uri: http://localhost
+      port: 8082
