@@ -1,11 +1,11 @@
 package tk.withkid.userlog.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,16 +18,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-@Service
 @Slf4j
+@Service
 public class SearchLogService {
     private FIrestoreRepository fIrestoreRepository;
     private Environment env;
+    private RestTemplate restTemplate;
 
     @Autowired
-    public SearchLogService(FIrestoreRepository fIrestoreRepository, Environment env) {
+    public SearchLogService(FIrestoreRepository fIrestoreRepository, Environment env, RestTemplate restTemplate) {
         this.fIrestoreRepository = fIrestoreRepository;
         this.env = env;
+        this.restTemplate = restTemplate;
     }
 
     public String saveSearchLog(String accessToken, SearchLog searchLog) throws ExecutionException, InterruptedException {
@@ -44,8 +46,8 @@ public class SearchLogService {
         return updateTIme;
     }
 
+    @HystrixCommand
     public Long getUserId(String accessToken) {
-        RestTemplate restTemplate = new RestTemplate();
         String apiuri = env.getProperty("withkid.api.userId.uri");
         String apiPort = env.getProperty("withkid.api.userId.port");
 
