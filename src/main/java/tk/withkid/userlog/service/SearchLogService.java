@@ -51,8 +51,10 @@ public class SearchLogService {
 
         UriComponents uri = UriComponentsBuilder.fromUriString(apiuri).path("/userId").port(apiPort).build();
 
-        RequestEntity<Void> req = RequestEntity.get(uri.toUri()).header("Authorization", accessToken).build();
-        ResponseEntity<Long> res = restTemplate.exchange(req, Long.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", accessToken);
+        HttpEntity<String> entity = new HttpEntity<String>("param", headers);
+        ResponseEntity<Long> res = restTemplate.exchange(uri.toUriString(),HttpMethod.GET ,entity, Long.class);
         return res.getBody();
     }
 }
