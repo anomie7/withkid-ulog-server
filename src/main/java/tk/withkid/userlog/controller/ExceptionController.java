@@ -8,15 +8,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 
+import java.net.ConnectException;
+
 @Slf4j
 @ControllerAdvice
 @RestController
 public class ExceptionController {
 
-    @ExceptionHandler(HttpStatusCodeException.class)
+    @ExceptionHandler({HttpStatusCodeException.class})
     public ResponseEntity<ErrorResponse> requestFailHandler(Exception e) {
         ErrorResponse body = ErrorResponse.builder().name(HttpStatusCodeException.class.getSimpleName())
-                .msg("요청이 실패했습니다.").status(HttpStatus.NOT_FOUND).build();
+                .msg("잘못된 요청으로 인한 실패").status(HttpStatus.NOT_FOUND).build();
+        log.error("restTemplate의 요청이 실패함: msg : {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler({ConnectException.class})
+    public ResponseEntity<ErrorResponse> connectFailHandler(Exception e) {
+        ErrorResponse body = ErrorResponse.builder().name(ConnectException.class.getSimpleName())
+                .msg("의존하는 서비스 컨포넌트의 연결이 실패했습니다.").status(HttpStatus.NOT_FOUND).build();
         log.error("restTemplate의 요청이 실패함: msg : {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
