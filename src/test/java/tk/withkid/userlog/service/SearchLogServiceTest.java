@@ -1,7 +1,9 @@
 package tk.withkid.userlog.service;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +16,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Ignore
 public class SearchLogServiceTest {
     @Autowired
     private SearchLogService searchLogService;
