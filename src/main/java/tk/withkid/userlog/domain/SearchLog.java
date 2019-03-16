@@ -17,7 +17,8 @@ public class SearchLog {
     private String region;
     private String timestamp;
 
-    public void setTimestamp(String timestamp) {
+    public void setStorableLog(Long userId, String timestamp) {
+        this.userId = userId;
         this.timestamp = timestamp;
     }
 }

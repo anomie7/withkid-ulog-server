@@ -1,2 +1,26 @@
+spring:
+  profiles:
+    active:
+      - local
 server:
   port: 8083
+---
+spring:
+  profiles: production
+withkid:
+  firestore:
+    keypath: "/usr/share/firebase/test-fe856-21f716968770.json"
+  api:
+    userId:
+      uri: https://withkid.tk
+      port: 8090
+---
+spring:
+  profiles: local
+withkid:
+  firestore:
+    keypath: "C:\\Users\\전찬동\\Downloads\\test-fe856-21f716968770.json"
+  api:
+    userId:
+      uri: http://192.168.99.100
+      port: 8082

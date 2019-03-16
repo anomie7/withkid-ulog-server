@@ -5,10 +5,10 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tk.withkid.userlog.repository.FIrestoreRepository;
-import tk.withkid.userlog.service.SearchLogService;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,7 +19,8 @@ import java.io.InputStream;
 @Slf4j
 public class FirestoreConfiguration {
 
-    final String keyPath = "C:\\Users\\전찬동\\Downloads\\test-fe856-21f716968770.json";
+    @Value("${withkid.firestore.keypath}")
+    private String keyPath;
 
     @Bean
     public FIrestoreRepository FIrestoreRepository(){
