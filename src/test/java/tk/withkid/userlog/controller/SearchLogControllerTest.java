@@ -11,6 +11,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.HeaderResultMatchers;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.repository.FIrestoreRepository;
 import tk.withkid.userlog.service.SearchLogService;
@@ -31,21 +32,18 @@ public class SearchLogControllerTest {
     @MockBean
     private SearchLogService searchLogService;
 
-    @MockBean
-    private FIrestoreRepository fIrestoreRepository;
-
     @Test
     public void testSetSearchLog() throws Exception {
+        String accessToken = "ddss";
         String updateTime = "2019-03-11T05:58:39.451161Z";
-        SearchLog searchLog = SearchLog.builder().userId(1L).category("Mu").region("서울").build();
+        SearchLog searchLog = SearchLog.builder().category("Mu").region("서울").build();
 
-        given(searchLogService.saveSearchLog(searchLog)).willReturn(updateTime);
-        given(fIrestoreRepository.saveSearchLog(updateTime, searchLog)).willReturn(updateTime);
+        given(searchLogService.saveSearchLog(accessToken, searchLog)).willReturn(updateTime);
 
         ObjectMapper mapper = new ObjectMapper();
         String requestJson = mapper.writeValueAsString(searchLog);
 
-        mvc.perform(post("/searchLog").content(requestJson)
+        mvc.perform(post("/searchLog").header("Authorization", accessToken).content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .accept(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())
