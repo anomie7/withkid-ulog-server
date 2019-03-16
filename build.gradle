@@ -27,12 +27,12 @@ ext {
 dependencies {
 	//spring-cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
 
 	//firebase-admin
 	compile 'com.google.firebase:firebase-admin:5.10.0'

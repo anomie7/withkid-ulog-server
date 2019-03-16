@@ -9,11 +9,11 @@ spring:
   profiles: production
 withkid:
   firestore:
-    keypath: "/usr/share/test-fe856-21f716968770.json"
+    keypath: "/usr/share/firebase/test-fe856-21f716968770.json"
   api:
     userId:
-      uri: http://withkid_auth_server
-      port: 8082
+      uri: https://withkid.tk
+      port: 8090
 ---
 spring:
   profiles: local
@@ -22,5 +22,5 @@ withkid:
     keypath: "C:\\Users\\전찬동\\Downloads\\test-fe856-21f716968770.json"
   api:
     userId:
-      uri: http://localhost
+      uri: http://192.168.99.100
       port: 8082
