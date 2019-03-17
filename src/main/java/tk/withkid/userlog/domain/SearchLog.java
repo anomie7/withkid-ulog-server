@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 public class SearchLog {
     private Long userId;
-    private String category;
+    private String kindOf;
     private String region;
     private String timestamp;
 
