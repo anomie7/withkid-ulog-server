@@ -20,6 +20,14 @@ public class SearchLog {
     private String timestamp;
 
     public void setStorableLog(Long userId, String timestamp) {
+        if(this.region == null) {
+            this.region = "전체";
+        }
+
+        if(this.kindOf == null) {
+            this.kindOf = "전체";
+        }
+
         this.userId = userId;
         this.timestamp = timestamp;
     }
