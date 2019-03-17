@@ -36,7 +36,7 @@ public class SearchLogControllerTest {
     public void testSetSearchLog() throws Exception {
         String accessToken = "ddss";
         String updateTime = "2019-03-11T05:58:39.451161Z";
-        SearchLog searchLog = SearchLog.builder().category("Mu").region("서울").build();
+        SearchLog searchLog = SearchLog.builder().kindOf("Mu").region("서울").build();
 
         given(searchLogService.saveSearchLog(accessToken, searchLog)).willReturn(updateTime);
 

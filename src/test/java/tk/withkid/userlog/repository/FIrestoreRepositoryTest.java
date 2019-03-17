@@ -21,7 +21,7 @@ public class FIrestoreRepositoryTest {
 
     @Test
     public void saveSearchLog() throws ExecutionException, InterruptedException {
-        SearchLog searchLog = SearchLog.builder().userId(1L).category("Mu").region("서울").timestamp("201902120211").build();
+        SearchLog searchLog = SearchLog.builder().userId(1L).kindOf("Mu").region("서울").timestamp("201902120211").build();
 
         String result = fIrestoreRepository.saveSearchLog("test", searchLog);
 

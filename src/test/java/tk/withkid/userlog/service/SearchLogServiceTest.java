@@ -22,7 +22,7 @@ public class SearchLogServiceTest {
 
     @Test
     public void saveSearchLog() throws ExecutionException, InterruptedException {
-        SearchLog searchLog = SearchLog.builder().userId(1L).category("Mu").region("서울").build();
+        SearchLog searchLog = SearchLog.builder().userId(1L).kindOf("Mu").region("서울").build();
 
         String res = searchLogService.saveSearchLog(accessTkn, searchLog);
 
