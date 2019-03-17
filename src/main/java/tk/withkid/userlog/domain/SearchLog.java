@@ -15,6 +15,8 @@ public class SearchLog {
     private Long userId;
     private String kindOf;
     private String region;
+    private String startDate;
+    private String endDate;
     private String timestamp;
 
     public void setStorableLog(Long userId, String timestamp) {
