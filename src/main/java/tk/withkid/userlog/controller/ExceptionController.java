@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import java.net.ConnectException;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @ControllerAdvice
@@ -29,5 +30,13 @@ public class ExceptionController {
                 .msg("의존하는 서비스 컨포넌트의 연결이 실패했습니다.").status(HttpStatus.NOT_FOUND).build();
         log.error("restTemplate의 요청이 실패함: msg : {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    @ExceptionHandler({TimeoutException.class})
+    public ResponseEntity<ErrorResponse> timeOutHandler(Exception e) {
+        ErrorResponse body = ErrorResponse.builder().name(TimeoutException.class.getSimpleName())
+                .msg("타임 아웃이 발생했습니다.").status(HttpStatus.REQUEST_TIMEOUT).build();
+        log.error("restTemplate의 요청이 실패함: msg : {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(body);
     }
 }
