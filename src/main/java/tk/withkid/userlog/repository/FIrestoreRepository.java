@@ -5,11 +5,6 @@ import com.google.cloud.firestore.*;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.util.DateTimeUtill;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
