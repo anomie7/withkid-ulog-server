@@ -1,14 +1,8 @@
 package tk.withkid.userlog.service;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.repository.FIrestoreRepository;
 
@@ -19,7 +13,6 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -51,16 +44,17 @@ public class SearchLogService {
         return updateTIme;
     }
 
-    public Map<String, String> getMaxSearchLogKeys(String accessToken) throws ExecutionException, InterruptedException {
+    public Map<String, String> getMaxSearchLogKeys(String accessToken) {
         HashMap<String, String> maxKeyBunch = new HashMap<>();
-        Long userId = this.authService.getUserId(accessToken);
         try {
+            Long userId = this.authService.getUserId(accessToken);
             List<SearchLog> searchLogs = fIrestoreRepository.findRecentSearchLog(userId);
-            Map<String, Long> groupByKindOf = searchLogs.stream().map(SearchLog::getKindOf).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+            Map<String, Long> groupByKindOf = searchLogs.stream().map(SearchLog::getKindOf).filter(Objects::nonNull).filter(s -> !s.equals("전체")).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
             maxKeyBunch.put("kindOf", getMaxKey(groupByKindOf));
-            Map<String, Long> groupByRegion = searchLogs.stream().map(SearchLog::getRegion).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+            Map<String, Long> groupByRegion = searchLogs.stream().map(SearchLog::getRegion).filter(Objects::nonNull).filter(s -> !s.equals("전체")).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
             maxKeyBunch.put("region", getMaxKey(groupByRegion));
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
+            log.error(e.getMessage());
             if(!maxKeyBunch.containsKey("kindOf")){
                 maxKeyBunch.put("kindOf", "전체");
             }
@@ -73,7 +67,8 @@ public class SearchLogService {
     }
 
     private String getMaxKey(Map<String, Long> map) {
-        return Collections.max(map.entrySet(), Comparator.comparingLong(Map.Entry::getValue)).getKey();
+        Optional<String> key = Optional.ofNullable(Collections.max(map.entrySet(), Comparator.comparingLong(Map.Entry::getValue)).getKey());
+        return key.orElse("전체");
     }
 
 }
