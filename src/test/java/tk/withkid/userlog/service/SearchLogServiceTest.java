@@ -9,14 +9,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.repository.FIrestoreRepository;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
@@ -46,24 +46,23 @@ public class SearchLogServiceTest {
 
     @Test
     public void getMaxSearchLogKeysTest() throws ExecutionException, InterruptedException {
-        SearchLog[] arr = { SearchLog.builder().region("대구").kindOf("Mu").build(),
-                            SearchLog.builder().region("대구").kindOf("Mu").build(),
-                            SearchLog.builder().region("부산").kindOf("Cl").build(),
-                            SearchLog.builder().region("서울").kindOf("Ex").build(),
-                            SearchLog.builder().region("서울").kindOf("Mu").build(),
-                            SearchLog.builder().region("서울").kindOf("Mu").build(),
-                            SearchLog.builder().region("서울").kindOf("Pl").build(),
-                            SearchLog.builder().region("대구").kindOf("Pl").build(),
-                            };
+        SearchLog[] arr = { SearchLog.builder().region("전체").kindOf("전체").build(),
+                SearchLog.builder().region("전체").kindOf("전체").build(),
+                SearchLog.builder().region("전체").kindOf("전체").build(),
+                SearchLog.builder().region("전체").kindOf("전체").build(),
+                SearchLog.builder().region("전체").kindOf("전체").build(),
+                SearchLog.builder().region("서울").kindOf("Mu").build(),
+                SearchLog.builder().region("서울").kindOf("Pl").build(),
+                SearchLog.builder().region("대구").kindOf("Pl").build(),
+        };
 
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
         given(this.fIrestoreRepository.findRecentSearchLog(5L)).willReturn(Arrays.asList(arr));
         searchLogService = new SearchLogService(fIrestoreRepository, authService);
 
         Map<String, String> maxKeys = searchLogService.getMaxSearchLogKeys(accessTkn);
-
         assertEquals("서울" ,maxKeys.get("region"));
-        assertEquals("Mu" ,maxKeys.get("kindOf"));
+        assertEquals("Pl" ,maxKeys.get("kindOf"));
     }
 
     @Test
@@ -80,10 +79,11 @@ public class SearchLogServiceTest {
 
     @Test
     public void getMaxSearchLogKeysWhenNullPointExceptionTest() throws ExecutionException, InterruptedException {
-        SearchLog[] arr = { SearchLog.builder().region("대구").kindOf("Mu").build(),
+        SearchLog[] arr = {
+                SearchLog.builder().region("대구").kindOf("Mu").build(),
                 SearchLog.builder().region("대구").kindOf("Mu").build(),
                 SearchLog.builder().region(null).kindOf("Cl").build(),
-                SearchLog.builder().region("서울").kindOf("Ex").build(),
+                SearchLog.builder().region("서울").kindOf(null).build(),
                 SearchLog.builder().region("서울").kindOf("Mu").build(),
                 SearchLog.builder().region("서울").kindOf("Mu").build(),
                 SearchLog.builder().region("서울").kindOf("Pl").build(),
@@ -96,7 +96,7 @@ public class SearchLogServiceTest {
 
         Map<String, String> maxKeys = searchLogService.getMaxSearchLogKeys(accessTkn);
 
-        assertEquals("전체" ,maxKeys.get("region"));
+        assertEquals("서울" ,maxKeys.get("region"));
         assertEquals("Mu" ,maxKeys.get("kindOf"));
     }
 
