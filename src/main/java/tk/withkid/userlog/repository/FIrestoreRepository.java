@@ -2,6 +2,7 @@ package tk.withkid.userlog.repository;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
+import tk.withkid.userlog.domain.EventLog;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.util.DateTimeUtill;
 
@@ -12,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 public class FIrestoreRepository {
     private Firestore fIrestore;
     private final String ulogCollection = "search-ulog";
+    private final String eventLogCollection = "event-ulog";
 
     public FIrestoreRepository(Firestore fIrestore) {
         this.fIrestore = fIrestore;
@@ -20,6 +22,14 @@ public class FIrestoreRepository {
     public String saveSearchLog(String docId, SearchLog searchLog) throws ExecutionException, InterruptedException {
         DocumentReference docRef = fIrestore.collection(ulogCollection).document(docId);
         ApiFuture<WriteResult> set = docRef.set(searchLog);
+
+        String updateTIme = String.valueOf(set.get().getUpdateTime());
+        return updateTIme;
+    }
+
+    public String saveEventLog(String docId, EventLog eventLog) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = fIrestore.collection(eventLogCollection).document(docId);
+        ApiFuture<WriteResult> set = docRef.set(eventLog);
 
         String updateTIme = String.valueOf(set.get().getUpdateTime());
         return updateTIme;

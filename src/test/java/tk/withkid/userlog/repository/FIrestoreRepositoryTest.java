@@ -35,4 +35,13 @@ public class FIrestoreRepositoryTest {
         List<SearchLog> searchLogs = this.fIrestoreRepository.findRecentSearchLog(userId);
         Assert.assertNotNull(searchLogs);
     }
+
+    @Test
+    public void saveEventLog() throws ExecutionException, InterruptedException {
+        EventLog eventLog = EventLog.builder().eventId(1L).build();
+        eventLog.setStorableLog(1L, DateTimeUtill.nowOfUTC());
+
+        String result = fIrestoreRepository.saveEventLog("test", eventLog);
+        Assert.assertNotNull(result);
+    }
 }
