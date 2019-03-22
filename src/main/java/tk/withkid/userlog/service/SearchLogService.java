@@ -3,12 +3,12 @@ package tk.withkid.userlog.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.withkid.userlog.domain.EventLog;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.repository.FIrestoreRepository;
+import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
@@ -26,22 +26,20 @@ public class SearchLogService {
         this.authService = authService;
     }
 
-    public static String getDocId(LocalDateTime now){
-        String random = String.valueOf(new Random().nextInt(100000));
-        String docId = now + "." + random;
-        return docId;
-    }
-
     public String saveSearchLog(String accessToken, SearchLog searchLog) throws ExecutionException, InterruptedException {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
-        String timestamp = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        LocalDateTime now = DateTimeUtill.nowOfUTC();
         Long userId = this.authService.getUserId(accessToken);
-        searchLog.setStorableLog(userId, timestamp);
-
+        searchLog.setStorableLog(userId, now);
         String docId = getDocId(now);
         String updateTIme = fIrestoreRepository.saveSearchLog(docId, searchLog);
         log.info("search user log update time: {}", updateTIme);
         return updateTIme;
+    }
+
+    public String getDocId(LocalDateTime now){
+        String random = String.valueOf(new Random().nextInt(100000));
+        String docId = now + "." + random;
+        return docId;
     }
 
     public Map<String, String> getMaxSearchLogKeys(String accessToken) {

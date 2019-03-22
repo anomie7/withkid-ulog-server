@@ -6,7 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import tk.withkid.userlog.domain.EventLog;
 import tk.withkid.userlog.domain.SearchLog;
+import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -20,8 +22,8 @@ public class FIrestoreRepositoryTest {
 
     @Test
     public void saveSearchLog() throws ExecutionException, InterruptedException {
-        SearchLog searchLog = SearchLog.builder().userId(1L).kindOf("Mu").region("서울").timestamp("201902120211").build();
-
+        SearchLog searchLog = SearchLog.builder().kindOf("Mu").region("서울").build();
+        searchLog.setStorableLog(1L, DateTimeUtill.nowOfUTC());
         String result = fIrestoreRepository.saveSearchLog("test", searchLog);
 
         Assert.assertNotNull(result);

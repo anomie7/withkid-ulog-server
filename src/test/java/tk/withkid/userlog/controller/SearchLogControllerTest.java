@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.service.SearchLogService;
+import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class SearchLogControllerTest {
         String accessToken = "ddss";
         String updateTime = "2019-03-11T05:58:39.451161Z";
         SearchLog searchLog = SearchLog.builder().kindOf("Mu").region("서울").build();
+        searchLog.setStorableLog(1L, DateTimeUtill.nowOfUTC());
 
         given(searchLogService.saveSearchLog(accessToken, searchLog)).willReturn(updateTime);
 

@@ -9,15 +9,14 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @ToString
-public class SearchLog {
-    private Long userId;
+public class SearchLog extends Log{
     private String kindOf;
     private String region;
     private String startDate;
     private String endDate;
-    private String timestamp;
 
-    public void setStorableLog(Long userId, String timestamp) {
+    @Override
+    public void setStorableLog(Long userId, LocalDateTime now) {
         if(this.region == null) {
             this.region = "전체";
         }
@@ -26,7 +25,6 @@ public class SearchLog {
             this.kindOf = "전체";
         }
 
-        this.userId = userId;
-        this.timestamp = timestamp;
+        super.setStorableLog(userId, now);
     }
 }

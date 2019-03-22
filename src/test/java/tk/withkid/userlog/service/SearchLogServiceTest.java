@@ -1,13 +1,16 @@
 package tk.withkid.userlog.service;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import tk.withkid.userlog.domain.EventLog;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.repository.FIrestoreRepository;
+import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -36,7 +39,7 @@ public class SearchLogServiceTest {
     public void saveSearchLogTest() throws ExecutionException, InterruptedException {
         SearchLog searchLog = SearchLog.builder().kindOf("Mu").region("서울").build();
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
-        given(this.fIrestoreRepository.saveSearchLog(SearchLogService.getDocId(LocalDateTime.now()), searchLog)).willReturn("2019-03-18T12:27:19.206629000Z");
+        given(this.fIrestoreRepository.saveSearchLog(searchLogService.getDocId(LocalDateTime.now()), searchLog)).willReturn("2019-03-18T12:27:19.206629000Z");
         searchLogService = new SearchLogService(fIrestoreRepository, authService);
 
         String res = searchLogService.saveSearchLog(accessTkn, searchLog);
@@ -99,5 +102,4 @@ public class SearchLogServiceTest {
         assertEquals("서울" ,maxKeys.get("region"));
         assertEquals("Mu" ,maxKeys.get("kindOf"));
     }
-
 }
