@@ -2,7 +2,8 @@ package tk.withkid.userlog.repository;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import tk.withkid.userlog.domain.EventLog;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.util.DateTimeUtill;
 
@@ -10,33 +11,27 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class FIrestoreRepository {
-    private Firestore fIrestore;
+@Repository
+public class SearchLogRepository {
+    private Firestore firestore;
     private final String ulogCollection = "search-ulog";
     private final String eventLogCollection = "event-ulog";
 
-    public FIrestoreRepository(Firestore fIrestore) {
-        this.fIrestore = fIrestore;
+    @Autowired
+    public SearchLogRepository(Firestore fIrestore) {
+        this.firestore = fIrestore;
     }
 
     public String saveSearchLog(String docId, SearchLog searchLog) throws ExecutionException, InterruptedException {
-        DocumentReference docRef = fIrestore.collection(ulogCollection).document(docId);
+        DocumentReference docRef = firestore.collection(ulogCollection).document(docId);
         ApiFuture<WriteResult> set = docRef.set(searchLog);
 
         String updateTIme = String.valueOf(set.get().getUpdateTime());
         return updateTIme;
     }
 
-    public String saveEventLog(String docId, EventLog eventLog) throws ExecutionException, InterruptedException {
-        DocumentReference docRef = fIrestore.collection(eventLogCollection).document(docId);
-        ApiFuture<WriteResult> set = docRef.set(eventLog);
-
-        String updateTIme = String.valueOf(set.get().getUpdateTime());
-        return updateTIme;
-    }
-
     public List<SearchLog> findRecentSearchLog(Long userId) throws ExecutionException, InterruptedException {
-        CollectionReference ulogRef = fIrestore.collection(ulogCollection);
+        CollectionReference ulogRef = firestore.collection(ulogCollection);
         Query query = ulogRef.whereEqualTo("userId", userId)
                             .whereGreaterThanOrEqualTo("timestamp", DateTimeUtill.oneWeekAgo())
                             .whereLessThanOrEqualTo("timestamp",DateTimeUtill.tomorrow());
@@ -47,4 +42,5 @@ public class FIrestoreRepository {
         }
         return searchLogs;
     }
+
 }

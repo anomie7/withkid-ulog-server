@@ -1,6 +1,7 @@
 package tk.withkid.userlog.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -8,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tk.withkid.userlog.repository.FIrestoreRepository;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,7 +23,7 @@ public class FirestoreConfiguration {
     private String keyPath;
 
     @Bean
-    public FIrestoreRepository FIrestoreRepository(){
+    public Firestore firestore(){
         try {
             InputStream serviceAccount = null;
             serviceAccount = new FileInputStream(keyPath);
@@ -31,12 +31,16 @@ public class FirestoreConfiguration {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(credentials)
                     .build();
-            FirebaseApp.initializeApp(options);
+            try {
+                FirebaseApp.initializeApp(options);
+            } catch (IllegalStateException e) {
+                FirebaseApp.initializeApp(options, "withkid");
+            }
         } catch (FileNotFoundException e) {
             log.error(e.getMessage());
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-        return new FIrestoreRepository(FirestoreClient.getFirestore());
+        return FirestoreClient.getFirestore();
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import tk.withkid.userlog.domain.EventLog;
-import tk.withkid.userlog.repository.FIrestoreRepository;
+import tk.withkid.userlog.repository.EventLogRepository;
 import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ public class EventLogServiceTest {
     private AuthService authService;
 
     @MockBean
-    private FIrestoreRepository fIrestoreRepository;
+    private EventLogRepository eventLogRepository;
 
     private String accessTkn = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNTUyMzkwOTQ3NTE5LCJ0eXBlIjoiYWNjZXNzLXRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyLWlkIjo1LCJleHAiOjE1ODQwMTY5NDcsImVtYWlsIjoiZGVwcm9tZWV0QHRyYWN0NC5jb20ifQ.J2DqpOYDEXfM-d49X2-G3qSdROZLKWmEgUxQOZMXp6w";
 
@@ -34,9 +34,9 @@ public class EventLogServiceTest {
         EventLog eventLog = EventLog.builder().eventId(1L).build();
         eventLog.setStorableLog(1L, DateTimeUtill.nowOfUTC());
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
-        given(this.fIrestoreRepository.saveEventLog(eventLogService.getDocId(LocalDateTime.now()), eventLog)).willReturn("2019-03-18T12:27:19.206629000Z");
+        given(this.eventLogRepository.saveEventLog(eventLogService.getDocId(LocalDateTime.now()), eventLog)).willReturn("2019-03-18T12:27:19.206629000Z");
 
-        eventLogService = new EventLogService(fIrestoreRepository, authService);
+        eventLogService = new EventLogService(eventLogRepository, authService);
         String result = eventLogService.saveEventLog(accessTkn, eventLog);
         Assert.assertNotNull(result);
     }

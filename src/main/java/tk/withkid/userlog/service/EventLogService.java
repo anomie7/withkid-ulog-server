@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.withkid.userlog.domain.EventLog;
-import tk.withkid.userlog.repository.FIrestoreRepository;
+import tk.withkid.userlog.repository.EventLogRepository;
 import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.time.LocalDateTime;
@@ -15,12 +15,12 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class EventLogService {
 
-    private FIrestoreRepository fIrestoreRepository;
+    private EventLogRepository eventLogRepository;
     private AuthService authService;
 
     @Autowired
-    public EventLogService(FIrestoreRepository fIrestoreRepository, AuthService authService) {
-        this.fIrestoreRepository = fIrestoreRepository;
+    public EventLogService(EventLogRepository eventLogRepository, AuthService authService) {
+        this.eventLogRepository = eventLogRepository;
         this.authService = authService;
     }
 
@@ -29,7 +29,7 @@ public class EventLogService {
         Long userId = this.authService.getUserId(accessToken);
         eventLog.setStorableLog(userId, now);
         String docId = getDocId(now);
-        String updateTIme = fIrestoreRepository.saveEventLog(docId, eventLog);
+        String updateTIme = eventLogRepository.saveEventLog(docId, eventLog);
         log.info("search user log update time: {}", updateTIme);
         return updateTIme;
     }

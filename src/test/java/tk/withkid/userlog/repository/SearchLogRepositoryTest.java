@@ -15,16 +15,16 @@ import java.util.concurrent.ExecutionException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FIrestoreRepositoryTest {
+public class SearchLogRepositoryTest {
 
     @Autowired
-    private FIrestoreRepository fIrestoreRepository;
+    private SearchLogRepository searchLogRepository;
 
     @Test
     public void saveSearchLog() throws ExecutionException, InterruptedException {
         SearchLog searchLog = SearchLog.builder().kindOf("Mu").region("서울").build();
         searchLog.setStorableLog(1L, DateTimeUtill.nowOfUTC());
-        String result = fIrestoreRepository.saveSearchLog("test", searchLog);
+        String result = searchLogRepository.saveSearchLog("test", searchLog);
 
         Assert.assertNotNull(result);
         }
@@ -32,16 +32,7 @@ public class FIrestoreRepositoryTest {
     @Test
     public void findRecentSearchLog() throws ExecutionException, InterruptedException {
         Long userId = 12L;
-        List<SearchLog> searchLogs = this.fIrestoreRepository.findRecentSearchLog(userId);
+        List<SearchLog> searchLogs = this.searchLogRepository.findRecentSearchLog(userId);
         Assert.assertNotNull(searchLogs);
-    }
-
-    @Test
-    public void saveEventLog() throws ExecutionException, InterruptedException {
-        EventLog eventLog = EventLog.builder().eventId(1L).build();
-        eventLog.setStorableLog(1L, DateTimeUtill.nowOfUTC());
-
-        String result = fIrestoreRepository.saveEventLog("test", eventLog);
-        Assert.assertNotNull(result);
     }
 }

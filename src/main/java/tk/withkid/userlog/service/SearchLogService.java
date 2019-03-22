@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.withkid.userlog.domain.SearchLog;
-import tk.withkid.userlog.repository.FIrestoreRepository;
+import tk.withkid.userlog.repository.SearchLogRepository;
 import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.time.LocalDateTime;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class SearchLogService {
-    private FIrestoreRepository fIrestoreRepository;
+    private SearchLogRepository fIrestoreRepository;
     private AuthService authService;
 
     @Autowired
-    public SearchLogService(FIrestoreRepository fIrestoreRepository, AuthService authService) {
+    public SearchLogService(SearchLogRepository fIrestoreRepository, AuthService authService) {
         this.fIrestoreRepository = fIrestoreRepository;
         this.authService = authService;
     }
