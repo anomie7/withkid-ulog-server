@@ -1,4 +1,4 @@
-package tk.withkid.userlog.controller;
+package tk.withkid.userlog.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Builder
-class ErrorResponse {
+public class ErrorResponse {
 	private String name;
 	private String msg;
 	private HttpStatus status;

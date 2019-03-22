@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
+import tk.withkid.userlog.dto.ErrorResponse;
 
 import java.net.ConnectException;
 import java.util.concurrent.TimeoutException;
