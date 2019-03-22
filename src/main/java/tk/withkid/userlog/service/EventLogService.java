@@ -17,11 +17,13 @@ public class EventLogService {
 
     private EventLogRepository eventLogRepository;
     private AuthService authService;
+    private ResourceService resourceService;
 
     @Autowired
-    public EventLogService(EventLogRepository eventLogRepository, AuthService authService) {
+    public EventLogService(EventLogRepository eventLogRepository, AuthService authService, ResourceService resourceService) {
         this.eventLogRepository = eventLogRepository;
         this.authService = authService;
+        this.resourceService = resourceService;
     }
 
     public String saveEventLog(String accessToken, EventLog eventLog) throws ExecutionException, InterruptedException {
