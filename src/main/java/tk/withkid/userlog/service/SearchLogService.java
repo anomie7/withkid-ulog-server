@@ -3,7 +3,6 @@ package tk.withkid.userlog.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tk.withkid.userlog.domain.EventLog;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.repository.FIrestoreRepository;
 import tk.withkid.userlog.util.DateTimeUtill;

@@ -1,16 +1,13 @@
 package tk.withkid.userlog.service;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import tk.withkid.userlog.domain.EventLog;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.repository.FIrestoreRepository;
-import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
