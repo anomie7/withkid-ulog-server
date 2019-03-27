@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tk.withkid.userlog.util.DateTimeUtill;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,7 +35,7 @@ public class FirestoreConfiguration {
             try {
                 FirebaseApp.initializeApp(options);
             } catch (IllegalStateException e) {
-                FirebaseApp.initializeApp(options, "withkid");
+                FirebaseApp.initializeApp(options, DateTimeUtill.nowOfUTC().toString());
             }
         } catch (FileNotFoundException e) {
             log.error(e.getMessage());
