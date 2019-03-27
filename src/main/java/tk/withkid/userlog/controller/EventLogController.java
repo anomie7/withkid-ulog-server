@@ -1,13 +1,11 @@
 package tk.withkid.userlog.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tk.withkid.userlog.domain.EventLog;
 import tk.withkid.userlog.service.EventLogService;
 
@@ -21,6 +19,12 @@ public class EventLogController {
     @Autowired
     public EventLogController(EventLogService eventLogService) {
         this.eventLogService = eventLogService;
+    }
+
+    @GetMapping(path = "/eventLog", headers = "Accept=application/json")
+    public ResponseEntity<JsonNode> getRecentEventLog(@RequestHeader(name = "Authorization") String accessToken) {
+        JsonNode events = eventLogService.getEvents(accessToken);
+        return ResponseEntity.ok().body(events);
     }
 
     @PostMapping(path = "/eventLog",headers="Accept=text/plain", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
