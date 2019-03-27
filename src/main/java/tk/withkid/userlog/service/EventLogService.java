@@ -40,6 +40,17 @@ public class EventLogService {
         return updateTIme;
     }
 
+    public JsonNode getEvents(String accessToken) {
+        JsonNode events = null;
+        try {
+            List<Long> eventIds = this.getRecentEventIds(accessToken);
+            events = resourceService.getEventsOf(eventIds);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        return events;
+    }
+
     public List<Long> getRecentEventIds(String accessToken) {
         List<Long> eventIds = null;
         try {
