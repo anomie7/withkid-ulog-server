@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.withkid.userlog.domain.EventLog;
+import tk.withkid.userlog.exception.EventIdNotFoundException;
 import tk.withkid.userlog.repository.EventLogRepository;
 import tk.withkid.userlog.util.DateTimeUtill;
 
@@ -45,13 +46,13 @@ public class EventLogService {
         try {
             List<Long> eventIds = this.getRecentEventIds(accessToken);
             events = resourceService.getEventsOf(eventIds);
-        } catch (IOException e) {
+        } catch (IOException | EventIdNotFoundException e) {
             log.error(e.getMessage());
         }
         return events;
     }
 
-    public List<Long> getRecentEventIds(String accessToken) {
+    public List<Long> getRecentEventIds(String accessToken) throws EventIdNotFoundException {
         List<Long> eventIds = null;
         try {
             Long userId = this.authService.getUserId(accessToken);
@@ -59,6 +60,7 @@ public class EventLogService {
             eventIds = recentEventLog.stream().map(EventLog::getEventId).distinct().collect(Collectors.toList());
         } catch (Exception e) {
             log.error(e.getMessage());
+            throw new EventIdNotFoundException();
         }
         return eventIds;
     }
