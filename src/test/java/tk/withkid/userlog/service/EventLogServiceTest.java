@@ -52,7 +52,7 @@ public class EventLogServiceTest {
     }
 
     @Test
-    public void getRecentEventLog() throws ExecutionException, InterruptedException {
+    public void getRecentEventIds() throws ExecutionException, InterruptedException {
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
         EventLog[] arr = {
                 EventLog.builder().eventId(1L).build(),
@@ -67,8 +67,9 @@ public class EventLogServiceTest {
         };
         given(eventLogRepository.findRecentEventLog(5L)).willReturn(Arrays.asList(arr));
 
-        List<Long> recentEventLog = this.eventLogService.getRecentEventLog(accessTkn);
+        List<Long> recentEventLog = this.eventLogService.getRecentEventIds(accessTkn);
         Assert.assertEquals(7, recentEventLog.size());
         Assert.assertNotNull(recentEventLog);
     }
+
 }
