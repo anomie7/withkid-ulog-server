@@ -30,8 +30,11 @@ public class ResourceService {
 
     @HystrixCommand
     public Quration getEventsOf(List<Long> eventIds) {
+        String apiuri = env.getProperty("withkid.api.uri");
+        String apiPort = env.getProperty("withkid.api.event.port");
+
         String pathVar = eventIds.toString().replace("[", "").replace("]", "");
-        UriComponents uriComponents = UriComponentsBuilder.fromUriString("http://localhost").path("/event/".concat(pathVar)).port(8081).build();
+        UriComponents uriComponents = UriComponentsBuilder.fromUriString(apiuri).path("/event/".concat(pathVar)).port(apiPort).build();
         String uriString = uriComponents.toUriString();
         EventDto[] eventDtos = restTemplate.getForObject(uriString, EventDto[].class);
         return new Quration("최근 조회한 이벤트", Arrays.asList(eventDtos));
