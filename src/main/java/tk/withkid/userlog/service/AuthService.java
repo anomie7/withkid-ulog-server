@@ -29,7 +29,7 @@ public class AuthService {
 
     @HystrixCommand
     public Long getUserId(String accessToken) {
-        String apiuri = env.getProperty("withkid.api.userId.uri");
+        String apiuri = env.getProperty("withkid.api.uri");
         String apiPort = env.getProperty("withkid.api.userId.port");
 
         UriComponents uri = UriComponentsBuilder.fromUriString(apiuri).path("/userId").port(apiPort).build();
