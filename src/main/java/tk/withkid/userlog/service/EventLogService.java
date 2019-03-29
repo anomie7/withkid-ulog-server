@@ -1,15 +1,14 @@
 package tk.withkid.userlog.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.withkid.userlog.domain.EventLog;
+import tk.withkid.userlog.dto.Quration;
 import tk.withkid.userlog.exception.EventIdNotFoundException;
 import tk.withkid.userlog.repository.EventLogRepository;
 import tk.withkid.userlog.util.DateTimeUtill;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -41,12 +40,12 @@ public class EventLogService {
         return updateTIme;
     }
 
-    public JsonNode getEvents(String accessToken) {
-        JsonNode events = null;
+    public Quration getEvents(String accessToken) {
+        Quration events = null;
         try {
             List<Long> eventIds = this.getRecentEventIds(accessToken);
             events = resourceService.getEventsOf(eventIds);
-        } catch (IOException | EventIdNotFoundException e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
         return events;

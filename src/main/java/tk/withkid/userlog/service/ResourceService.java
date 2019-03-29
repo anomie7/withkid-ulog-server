@@ -1,7 +1,6 @@
 package tk.withkid.userlog.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import tk.withkid.userlog.dto.EventDto;
+import tk.withkid.userlog.dto.Quration;
 
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -27,14 +28,12 @@ public class ResourceService {
         this.env = env;
     }
 
-    public JsonNode getEventsOf(List<Long> eventIds) throws IOException {
+    @HystrixCommand
+    public Quration getEventsOf(List<Long> eventIds) {
         String pathVar = eventIds.toString().replace("[", "").replace("]", "");
         UriComponents uriComponents = UriComponentsBuilder.fromUriString("http://localhost").path("/event/".concat(pathVar)).port(8081).build();
         String uriString = uriComponents.toUriString();
-        String res = restTemplate.getForObject(uriString, String.class);
-
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = mapper.readTree(res);
-        return jsonNode;
+        EventDto[] eventDtos = restTemplate.getForObject(uriString, EventDto[].class);
+        return new Quration("최근 조회한 이벤트", Arrays.asList(eventDtos));
     }
 }

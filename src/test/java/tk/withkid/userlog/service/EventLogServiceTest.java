@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import tk.withkid.userlog.domain.EventLog;
+import tk.withkid.userlog.exception.EventIdNotFoundException;
 import tk.withkid.userlog.repository.EventLogRepository;
 import tk.withkid.userlog.util.DateTimeUtill;
 
@@ -52,7 +53,7 @@ public class EventLogServiceTest {
     }
 
     @Test
-    public void getRecentEventIds() throws ExecutionException, InterruptedException {
+    public void getRecentEventIds() throws ExecutionException, InterruptedException, EventIdNotFoundException {
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
         EventLog[] arr = {
                 EventLog.builder().eventId(1L).build(),
