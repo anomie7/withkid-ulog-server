@@ -1,14 +1,11 @@
-package com.withkid.api.dto;
+package tk.withkid.userlog.dto;
 
-import com.withkid.api.domain.InterparkType;
-import com.withkid.api.domain.Price;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Getter
@@ -22,8 +19,5 @@ public abstract class AbstractEventDto {
 	private InterparkType kindOf;
 	private String imageFilePath;
 	private List<PriceDto> price = new ArrayList<>();
-	
-	protected void addPrice(List<Price> price) {
-		this.price = price.stream().map(PriceDto::fromEntity).collect(Collectors.toList());
-	}
+
 }

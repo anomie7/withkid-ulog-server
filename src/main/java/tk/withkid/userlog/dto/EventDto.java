@@ -1,8 +1,6 @@
-package com.withkid.api.dto;
+package tk.withkid.userlog.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.withkid.api.domain.InterParkContent;
-import com.withkid.api.domain.InterparkType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,11 +23,6 @@ public class EventDto extends AbstractEventDto {
 		this.endDate = endDate;
 	}
 
-	public static EventDto fromEntity(InterParkContent entity) {
-		EventDto dto = EventDto.builder().eventId(entity.getId()).name(entity.getName()).location(entity.getLocation())
-				.startDate(entity.getStartDate().toLocalDate()).endDate(entity.getEndDate().toLocalDate())
-				.kindOf(entity.getDtype()).imageFilePath(entity.getImageFilePath()).build();
-		dto.addPrice(entity.getPrice());
-		return dto;
-	}
+
+
 }

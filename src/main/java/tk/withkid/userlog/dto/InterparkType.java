@@ -1,4 +1,4 @@
-package com.withkid.api.domain;
+package tk.withkid.userlog.dto;
 
 public enum InterparkType {
 	Mu("Fam_M"), Pl("Fam_P"), 
