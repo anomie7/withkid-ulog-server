@@ -1,6 +1,6 @@
 package tk.withkid.userlog.service;
 
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,14 +9,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import tk.withkid.userlog.domain.SearchLog;
 import tk.withkid.userlog.repository.SearchLogRepository;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
@@ -27,21 +25,13 @@ public class SearchLogServiceTest {
     private AuthService authService;
 
     @MockBean
-    private SearchLogRepository searchLogRepository;
+    private SearchLogRepository mockSearchLogRepository;
 
     private String accessTkn = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNTUyMzkwOTQ3NTE5LCJ0eXBlIjoiYWNjZXNzLXRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyLWlkIjo1LCJleHAiOjE1ODQwMTY5NDcsImVtYWlsIjoiZGVwcm9tZWV0QHRyYWN0NC5jb20ifQ.J2DqpOYDEXfM-d49X2-G3qSdROZLKWmEgUxQOZMXp6w";
 
-    @Test
-    @Ignore
-    public void saveSearchLogTest() throws ExecutionException, InterruptedException {
-        SearchLog searchLog = SearchLog.builder().kindOf("Mu").region("서울").build();
-        given(this.authService.getUserId(accessTkn)).willReturn(5L);
-        given(this.searchLogRepository.saveSearchLog(searchLogService.getDocId(LocalDateTime.now()), searchLog)).willReturn("2019-03-18T12:27:19.206629000Z");
-        searchLogService = new SearchLogService(searchLogRepository, authService);
-
-        String res = searchLogService.saveSearchLog(accessTkn, searchLog);
-
-        assertNotNull(res);
+    @Before
+    public void provisioning(){
+        searchLogService = new SearchLogService(mockSearchLogRepository, authService);
     }
 
     @Test
@@ -57,8 +47,7 @@ public class SearchLogServiceTest {
         };
 
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
-        given(this.searchLogRepository.findRecentSearchLog(5L)).willReturn(Arrays.asList(arr));
-        searchLogService = new SearchLogService(searchLogRepository, authService);
+        given(this.mockSearchLogRepository.findRecentSearchLog(5L)).willReturn(Arrays.asList(arr));
 
         Map<String, String> maxKeys = searchLogService.getMaxSearchLogKeys(accessTkn);
         assertEquals("서울" ,maxKeys.get("region"));
@@ -68,8 +57,7 @@ public class SearchLogServiceTest {
     @Test
     public void getMaxSearchLogKeysWhenNotFoundTest() throws ExecutionException, InterruptedException {
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
-        given(this.searchLogRepository.findRecentSearchLog(5L)).willReturn(Collections.singletonList(SearchLog.builder().region("전체").kindOf("전체").build()));
-        searchLogService = new SearchLogService(searchLogRepository, authService);
+        given(this.mockSearchLogRepository.findRecentSearchLog(5L)).willReturn(Collections.singletonList(SearchLog.builder().region("전체").kindOf("전체").build()));
 
         Map<String, String> maxKeys = searchLogService.getMaxSearchLogKeys(accessTkn);
 
@@ -91,8 +79,7 @@ public class SearchLogServiceTest {
         };
 
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
-        given(this.searchLogRepository.findRecentSearchLog(5L)).willReturn(Arrays.asList(arr));
-        searchLogService = new SearchLogService(searchLogRepository, authService);
+        given(this.mockSearchLogRepository.findRecentSearchLog(5L)).willReturn(Arrays.asList(arr));
 
         Map<String, String> maxKeys = searchLogService.getMaxSearchLogKeys(accessTkn);
 

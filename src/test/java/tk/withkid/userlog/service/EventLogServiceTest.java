@@ -2,7 +2,6 @@ package tk.withkid.userlog.service;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,18 +37,6 @@ public class EventLogServiceTest {
     @Before
     public void provisioning(){
         eventLogService = new EventLogService(eventLogRepository, authService, resourceService);
-    }
-
-    @Test
-    @Ignore
-    public void saveEventLog() throws ExecutionException, InterruptedException {
-        EventLog eventLog = EventLog.builder().eventId(1L).build();
-        eventLog.setStorableLog(1L, DateTimeUtill.nowOfUTC());
-        given(this.authService.getUserId(accessTkn)).willReturn(5L);
-        given(this.eventLogRepository.saveEventLog(eventLogService.getDocId(LocalDateTime.now()), eventLog)).willReturn("2019-03-18T12:27:19.206629000Z");
-
-        String result = eventLogService.saveEventLog(accessTkn, eventLog);
-        Assert.assertNotNull(result);
     }
 
     @Test
