@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.withkid.userlog.domain.SearchLog;
+import tk.withkid.userlog.exception.AuthorizationUnavailableException;
 import tk.withkid.userlog.repository.SearchLogRepository;
 import tk.withkid.userlog.util.DateTimeUtill;
 
@@ -25,7 +26,7 @@ public class SearchLogService {
         this.authService = authService;
     }
 
-    public String saveSearchLog(String accessToken, SearchLog searchLog) throws ExecutionException, InterruptedException {
+    public String saveSearchLog(String accessToken, SearchLog searchLog) throws ExecutionException, InterruptedException, AuthorizationUnavailableException {
         LocalDateTime now = DateTimeUtill.nowOfUTC();
         Long userId = this.authService.getUserId(accessToken);
         searchLog.setStorableLog(userId, now);

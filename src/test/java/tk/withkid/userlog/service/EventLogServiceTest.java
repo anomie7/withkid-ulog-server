@@ -8,11 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import tk.withkid.userlog.domain.EventLog;
-import tk.withkid.userlog.exception.EventIdNotFoundException;
+import tk.withkid.userlog.exception.AuthorizationUnavailableException;
 import tk.withkid.userlog.repository.EventLogRepository;
-import tk.withkid.userlog.util.DateTimeUtill;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -32,7 +30,7 @@ public class EventLogServiceTest {
     @MockBean
     private EventLogRepository eventLogRepository;
 
-    private String accessTkn = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNTUyMzkwOTQ3NTE5LCJ0eXBlIjoiYWNjZXNzLXRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyLWlkIjo1LCJleHAiOjE1ODQwMTY5NDcsImVtYWlsIjoiZGVwcm9tZWV0QHRyYWN0NC5jb20ifQ.J2DqpOYDEXfM-d49X2-G3qSdROZLKWmEgUxQOZMXp6w";
+    private String accessTkn = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNTU5MjMxOTE1NzYxLCJ0eXBlIjoiYWNjZXNzLXRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyLWlkIjo1LCJleHAiOjE1NTkyMzU1MTUsImVtYWlsIjoiZGVwcm9tZWV0QHRyYWN0NC5jb20ifQ.WwRqgGxtfVKdG0HMBsZN5k_zqPnpWN49eG2o6qYgMUg";
 
     @Before
     public void provisioning(){
@@ -40,7 +38,7 @@ public class EventLogServiceTest {
     }
 
     @Test
-    public void getRecentEventIds() throws ExecutionException, InterruptedException, EventIdNotFoundException {
+    public void getRecentEventIds() throws ExecutionException, InterruptedException, AuthorizationUnavailableException {
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
         EventLog[] arr = {
                 EventLog.builder().eventId(1L).build(),

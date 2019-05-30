@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tk.withkid.userlog.domain.SearchLog;
+import tk.withkid.userlog.exception.AuthorizationUnavailableException;
 import tk.withkid.userlog.service.SearchLogService;
 
 import java.util.Map;
@@ -23,7 +24,7 @@ public class SearchLogController {
     }
 
     @PostMapping(path = "/searchLog",headers="Accept=text/plain", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> setSearchLog(@RequestHeader(name = "Authorization") String accessToken, @RequestBody SearchLog searchLog) throws ExecutionException, InterruptedException {
+    public ResponseEntity<String> setSearchLog(@RequestHeader(name = "Authorization") String accessToken, @RequestBody SearchLog searchLog) throws ExecutionException, InterruptedException, AuthorizationUnavailableException {
         String updateTIme = null;
         updateTIme = searchLogService.saveSearchLog(accessToken, searchLog);
         return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(updateTIme);

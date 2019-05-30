@@ -21,7 +21,7 @@ public class EventLogRepositoryTest {
     @Test
     public void saveEventLog() throws ExecutionException, InterruptedException {
         EventLog eventLog = EventLog.builder().eventId(1L).build();
-        eventLog.setStorableLog(1L, DateTimeUtill.nowOfUTC());
+        eventLog.setStorableLog(5L, DateTimeUtill.nowOfUTC());
 
         String result = eventLogRepository.saveEventLog("test", eventLog);
         Assert.assertNotNull(result);

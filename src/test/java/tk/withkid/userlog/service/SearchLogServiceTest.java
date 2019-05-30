@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import tk.withkid.userlog.domain.SearchLog;
+import tk.withkid.userlog.exception.AuthorizationUnavailableException;
 import tk.withkid.userlog.repository.SearchLogRepository;
 
 import java.util.Arrays;
@@ -35,7 +36,7 @@ public class SearchLogServiceTest {
     }
 
     @Test
-    public void getMaxSearchLogKeysTest() throws ExecutionException, InterruptedException {
+    public void getMaxSearchLogKeysTest() throws ExecutionException, InterruptedException, AuthorizationUnavailableException {
         SearchLog[] arr = { SearchLog.builder().region("전체").kindOf("전체").build(),
                 SearchLog.builder().region("전체").kindOf("전체").build(),
                 SearchLog.builder().region("전체").kindOf("전체").build(),
@@ -55,7 +56,7 @@ public class SearchLogServiceTest {
     }
 
     @Test
-    public void getMaxSearchLogKeysWhenNotFoundTest() throws ExecutionException, InterruptedException {
+    public void getMaxSearchLogKeysWhenNotFoundTest() throws ExecutionException, InterruptedException, AuthorizationUnavailableException {
         given(this.authService.getUserId(accessTkn)).willReturn(5L);
         given(this.mockSearchLogRepository.findRecentSearchLog(5L)).willReturn(Collections.singletonList(SearchLog.builder().region("전체").kindOf("전체").build()));
 
@@ -66,7 +67,7 @@ public class SearchLogServiceTest {
     }
 
     @Test
-    public void getMaxSearchLogKeysWhenNullPointExceptionTest() throws ExecutionException, InterruptedException {
+    public void getMaxSearchLogKeysWhenNullPointExceptionTest() throws ExecutionException, InterruptedException, AuthorizationUnavailableException {
         SearchLog[] arr = {
                 SearchLog.builder().region("대구").kindOf("Mu").build(),
                 SearchLog.builder().region("대구").kindOf("Mu").build(),

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.withkid.userlog.domain.EventLog;
 import tk.withkid.userlog.dto.Quration;
-import tk.withkid.userlog.exception.EventIdNotFoundException;
+import tk.withkid.userlog.exception.AuthorizationUnavailableException;
 import tk.withkid.userlog.repository.EventLogRepository;
 import tk.withkid.userlog.util.DateTimeUtill;
 
@@ -30,7 +30,7 @@ public class EventLogService {
         this.resourceService = resourceService;
     }
 
-    public String saveEventLog(String accessToken, EventLog eventLog) throws ExecutionException, InterruptedException {
+    public String saveEventLog(String accessToken, EventLog eventLog) throws ExecutionException, InterruptedException, AuthorizationUnavailableException {
         LocalDateTime now = DateTimeUtill.nowOfUTC();
         Long userId = this.authService.getUserId(accessToken);
         eventLog.setStorableLog(userId, now);
@@ -40,27 +40,25 @@ public class EventLogService {
         return updateTIme;
     }
 
-    public Quration getEvents(String accessToken) {
+    public Quration getEvents(String accessToken) throws AuthorizationUnavailableException {
         Quration events = null;
+        List<Long> eventIds = null;
         try {
-            List<Long> eventIds = this.getRecentEventIds(accessToken);
+            eventIds = this.getRecentEventIds(accessToken);
             events = resourceService.getEventsOf(eventIds);
-        } catch (Exception e) {
+        } catch (ExecutionException e) {
+            log.error(e.getMessage());
+        } catch (InterruptedException e) {
             log.error(e.getMessage());
         }
         return events;
     }
 
-    public List<Long> getRecentEventIds(String accessToken) throws EventIdNotFoundException {
+    public List<Long> getRecentEventIds(String accessToken) throws ExecutionException, InterruptedException, AuthorizationUnavailableException {
         List<Long> eventIds = null;
-        try {
-            Long userId = this.authService.getUserId(accessToken);
-            List<EventLog> recentEventLog = this.eventLogRepository.findRecentEventLog(userId);
-            eventIds = recentEventLog.stream().map(EventLog::getEventId).distinct().collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new EventIdNotFoundException();
-        }
+        Long userId = this.authService.getUserId(accessToken);
+        List<EventLog> recentEventLog = this.eventLogRepository.findRecentEventLog(userId);
+        eventIds = recentEventLog.stream().map(EventLog::getEventId).distinct().collect(Collectors.toList());
         return eventIds;
     }
 
